@@ -29,8 +29,8 @@ DRY_RUN=False
 ```
 
 The emails themselves should be put into a file in the root of the
-directory called emails.json. This is a simple json object with a mapping
-of email:name, like the following:
+directory called `emails.json`. This is a simple json object with a mapping
+of `email:name`, like the following:
 
 ```
 {
