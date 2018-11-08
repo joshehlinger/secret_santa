@@ -15,7 +15,7 @@ def main():
     password = os.getenv("EMAIL_PASSWORD")
     dry_run = eval(os.getenv("DRY_RUN", True))
 
-    with open('test_emails.json') as emails:
+    with open('emails.json') as emails:
         email_to_name_dict = json.load(emails)
         email_list = list(email_to_name_dict.keys())
 
