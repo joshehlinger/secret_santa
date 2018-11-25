@@ -1,8 +1,11 @@
-import os
-import smtplib
-import random
 import json
+import os
+import random
+import smtplib
+from datetime import datetime
 from email import message
+from itertools import cycle
+
 from dotenv import load_dotenv
 
 
@@ -17,34 +20,29 @@ def main():
 
     with open('emails.json') as emails:
         email_to_name_dict = json.load(emails)
-        email_list = list(email_to_name_dict.keys())
 
-    random.shuffle(email_list)
+    santas = random.sample(email_to_name_dict.items(), len(email_to_name_dict))
+    targets = cycle(santas)
+    next(targets)
 
     server.ehlo()
     server.starttls()
     server.login(username, password)
 
-    for x in range(len(email_list)):
+    for (santa_email, santa_name), (target_email, target_name) in zip(santas, targets):
         msg = message.Message()
 
-        if x == len(email_list) - 1:
-            theTarget = email_to_name_dict[email_list[0]]
-        else:
-            theTarget = email_to_name_dict[email_list[x + 1]]
-        theSanta = email_to_name_dict[email_list[x]]
-
         msg.add_header('From', username)
-        msg.add_header('To', email_list[0])
-        msg.add_header('Subject', 'Secret Santa 2017')
+        msg.add_header('To', target_email)
+        msg.add_header('Subject', f'Secret Santa {datetime.now().year}')
 
-        msgText = "Ho ho ho, its " + theSanta + "!\n\nHere's your secret santa recipient: " + theTarget + \
-                  "\n\nHappy Holidays! Please remember the gift should be about $20, or " + \
+        msgText = f"Ho ho ho, its {santa_name}!\n\nHere's your secret santa recipient: {target_name}" \
+                  "\n\nHappy Holidays! Please remember the gift should be about $20, or " \
                   "its handmade equivalent.\n\n\n\n(This is an automated email)\n\n"
 
         msg.set_payload(msgText)
         if dry_run == False:
-            server.sendmail(username, email_list[x], msg.as_string())
+            server.sendmail(username, santa_email, msg.as_string())
 
     server.quit()
     print('\nits over!')
