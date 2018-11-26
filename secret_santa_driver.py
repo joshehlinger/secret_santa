@@ -33,7 +33,7 @@ def main():
         msg = message.Message()
 
         msg.add_header('From', username)
-        msg.add_header('To', target_email)
+        msg.add_header('To', santa_email)
         msg.add_header('Subject', f'Secret Santa {datetime.now().year}')
 
         msgText = f"Ho ho ho, its {santa_name}!\n\nHere's your secret santa recipient: {target_name}" \
