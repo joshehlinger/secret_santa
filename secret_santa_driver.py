@@ -4,7 +4,6 @@ import random
 import smtplib
 from datetime import datetime
 from email import message
-from itertools import cycle
 
 from dotenv import load_dotenv
 
@@ -18,30 +17,35 @@ def main():
     password = os.getenv("EMAIL_PASSWORD")
     dry_run = eval(os.getenv("DRY_RUN", True))
 
-    with open('emails.json') as emails:
-        email_to_name_dict = json.load(emails)
-
-    santas = random.sample(email_to_name_dict.items(), len(email_to_name_dict))
-    targets = cycle(santas)
-    next(targets)
-
     server.ehlo()
     server.starttls()
     server.login(username, password)
 
-    for (santa_email, santa_name), (target_email, target_name) in zip(santas, targets):
-        msg = message.Message()
+    with open('emails.json') as emails:
+        email_list = list(json.load(emails).items())
 
+    random.shuffle(email_list)
+
+    for idx, (santa_name, santa_email) in enumerate(email_list):
+        index = idx + 1
+        if index == len(email_list):
+            target_name = email_list[0][0]
+        else:
+            target_name = email_list[index][0]
+
+        msg = message.Message()
         msg.add_header('From', username)
         msg.add_header('To', santa_email)
         msg.add_header('Subject', f'Secret Santa {datetime.now().year}')
 
-        msgText = f"Ho ho ho, its {santa_name}!\n\nHere's your secret santa recipient: {target_name}" \
-                  "\n\nHappy Holidays! Please remember the gift should be about $20, or " \
-                  "its handmade equivalent.\n\n\n\n(This is an automated email)\n\n"
+        msg_txt = f"Ho ho ho, its {santa_name}!\n\nHere's your secret santa " \
+                  f"recipient: {target_name} \n\nHappy Holidays! Please " \
+                  "remember the gift should be about $25, or its " \
+                  "handmade equivalent.\n\n\n\n" \
+                  "(This is an automated email pls don't respond)\n\n"
 
-        msg.set_payload(msgText)
-        if dry_run == False:
+        msg.set_payload(msg_txt)
+        if not dry_run:
             server.sendmail(username, santa_email, msg.as_string())
 
     server.quit()

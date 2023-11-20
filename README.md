@@ -3,7 +3,8 @@
 Ho ho ho!
 
 Uses a gmail account and a json file to randomize and send secret
-santa assignments
+santa assignments. Keep in mind that if you send emails from gmail you'll
+need to set up an App Password - https://support.google.com/accounts/answer/185833?hl=en
 
 A 5/10 on the Jank Scale.
 
@@ -30,13 +31,13 @@ DRY_RUN=False
 
 The emails themselves should be put into a file in the root of the
 directory called `emails.json`. This is a simple json object with a mapping
-of `email:name`, like the following:
+of `name:email`, like the following:
 
 ```
 {
-    "email@gmail.com": "A Name",
-    "anotheremail@gmail.com": "Totally Real",
-    "k.email.yes@gmail.com": "Homer Simpson",
-    "stillanemail@gmail.com": "Another Person"
+    "A Name": "email@gmail.com", 
+    "Totally Real": "anotheremail@gmail.com", 
+    "Homer Simpson": "k.email.yes@gmail.com", 
+    "Another Person": "stillanemail@gmail.com"
 }
 ```
