@@ -28,10 +28,8 @@ def main():
 
     for idx, (santa_name, santa_email) in enumerate(email_list):
         index = idx + 1
-        if index == len(email_list):
-            target_name = email_list[0][0]
-        else:
-            target_name = email_list[index][0]
+        target_name = email_list[0][0] if index == len(email_list) \
+            else email_list[index][0]
 
         msg = message.Message()
         msg.add_header('From', username)
