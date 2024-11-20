@@ -1,3 +1,5 @@
 .env
 emails.json
 *_emails.json
+emails.csv
+*_emails.csv
