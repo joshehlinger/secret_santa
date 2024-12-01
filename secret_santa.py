@@ -62,6 +62,8 @@ def main():
         msg.set_payload(msg_txt)
         if args.dry_run:
             logging.info('Would send email to {}'.format(santa['email']))
+            # Verify that it's a valid email
+            server.verify(santa['email'])
         else:
             # Don't log the actual email here, b/c it's a secret (santa)!
             logging.info('Sending email')
