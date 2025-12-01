@@ -5,3 +5,6 @@ emails.csv
 *_emails.csv
 emails_*.csv
 emails_*.json
+couples.json
+*_couples.json
+couples_*.json

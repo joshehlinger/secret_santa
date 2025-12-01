@@ -1,6 +1,7 @@
 import argparse
 import csv
 import logging
+import json
 import random
 import smtplib
 import sys
@@ -41,6 +42,28 @@ def main():
         for row in csvdict:
             emails.append(row)
     random.shuffle(emails)
+
+    # We have an exclusion list that re-shuffles if a couple gets each other
+    with open('couples.json', 'r') as f:
+        couples = {frozenset(pair) for pair in json.load(f)}
+
+    while True:
+        valid = True
+        for idx, santa in enumerate(emails):
+            index = idx + 1
+            target = emails[0] if index == len(emails) else emails[index]
+
+            if frozenset([santa['name'].lower(), target['name'].lower()]) in couples:
+                valid = False
+                logging.warning(f"{santa['name']} got {target['name']}, "
+                                "which is disallowed by the couples list. "
+                                "Re-shuffling.")
+                random.shuffle(emails)
+                break
+        if valid:
+            logging.info('Santa list passed verification')
+            break
+
 
     # Build the messages and send em
     for idx, santa in enumerate(emails):

@@ -10,7 +10,7 @@ A 5/10 on the Jank Scale.
 
 ## Configuration
 
-Run with `python secret_santa_driver.py APP_USERNAME APP_PASSWORD`
+Run with `python secret_santa.py APP_USERNAME APP_PASSWORD`
 
 Use the provided `--dry-run` option to test this without actually sending a bunch of emails
 
@@ -22,4 +22,15 @@ name,email,notes
 A Name,email@gmail.com,Please dont get me any socks
 Homer Simpson,k.email.yes@gmail.com,More donuts please!
 Another Person,stillanemail@gmail.com,"Make sure, that you, escape commas"
+```
+
+To prevent couples from getting each other as secret santa recipients, create a `couples.json` file.
+For normalization reasons, keep it all lowercase:
+
+```json
+[
+  ["romeo", "juliet"],
+  ["bonnie", "clyde"],
+  ["mickey", "minnie"]
+]
 ```
